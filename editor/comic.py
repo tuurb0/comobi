@@ -1,5 +1,4 @@
 from tempfile import TemporaryDirectory
-import os
 from editor.volume import Volume
 
 
@@ -10,9 +9,8 @@ class Comic:
         self.volumes: list[Volume] = []
         self.lang = 'en-US'
 
-        self.__temp_dir = TemporaryDirectory('.tmp', 'COMOBI~')
-        self.__src_dir = os.path.join(self.__temp_dir.name, '.src')
+        self.__work_path = TemporaryDirectory('.tmp', 'COMOBI~')
 
     @property
-    def temp_dir(self):
-        return self.__temp_dir
+    def work_path(self):
+        return self.__work_path

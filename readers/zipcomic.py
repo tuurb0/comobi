@@ -1,6 +1,8 @@
 from editor.comic import Comic
 from editor.chapter import Chapter
 from editor.volume import Volume
+from editor.page import Page
+
 import os
 from zipfile import ZipFile
 
@@ -9,7 +11,7 @@ class ZipComic:
     def __init__(self, file):
         self.file = file
         self.comic = Comic(self.__get_file_name())
-        self.__work_dir = os.path.join(self.comic.temp_dir.name, '.src')
+        self.__work_dir = os.path.join(self.comic.work_path.name, '.zip')
         self.__unpack_comic_to_temp_folder()
         self.__is_several_volumes = self.__volume_check()
         self.comic.volumes = self.__load_comic_structure()
@@ -47,9 +49,9 @@ class ZipComic:
     def __load_comic_structure(self):
         volumes = []
         # If more than one volume
+        page_counter = 0
         if self.__is_several_volumes:
             files = os.listdir(self.__work_dir)
-
             # Volumes
             for i in files:
                 i_files = os.path.join(self.__work_dir, i)
@@ -63,10 +65,12 @@ class ZipComic:
                         chapter = Chapter(y, y_files, os.listdir(i_files).index(y))
                         for z in os.listdir(y_files):
                             z_files = os.path.join(y_files, z)
-                            chapter.add_page(z_files)
+                            page_counter += 1
+                            chapter.add_page(Page(z, z_files, page_counter))
                     elif len(list(os.listdir(i_files))) == 1:
-                        chapter = Chapter('Cover', i_files, 0)
-                        chapter.add_page(y_files)
+                        chapter = Chapter(y, i_files, 0)
+                        page_counter += 1
+                        chapter.add_page(Page(y, y_files, page_counter))
                     else:
                         print('Error: Failure structure')
 
@@ -84,7 +88,8 @@ class ZipComic:
                 # Pages
                 for y in os.listdir(i_files):
                     y_files = os.path.join(i_files, y)
-                    chapter.add_page(y_files)
+                    page_counter += 1
+                    chapter.add_page(Page(y, y_files, page_counter))
                 volume.add_chapter(chapter)
 
             volumes.append(volume)

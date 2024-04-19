@@ -10,9 +10,9 @@ class ZipComic:
         self.path = path
         self.comic = Comic()
         self.work_dir = os.path.join(self.comic.temp_dir.name, '_zipcomic')
-        self.__is_several_volumes = False
+        self.__is_several_volumes = None
 
-        #Init
+        # Init
         self.__unpack_comic()
         self.__is_several_volumes = self.__volume_checker()
 
@@ -32,9 +32,8 @@ class ZipComic:
 
                 if os.path.isdir(y_files):
                     volume_counter += 1
-                    break
 
-        if volume_counter:
-            return True
-        else:
-            return False
+            if volume_counter:
+                return True
+
+        return False

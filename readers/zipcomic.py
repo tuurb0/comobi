@@ -44,7 +44,6 @@ class ZipComic:
                 return True
 
         return False
-
     def __load_comic_structure(self):
         volumes = []
         # If more than one volume

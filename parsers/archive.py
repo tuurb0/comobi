@@ -7,14 +7,15 @@ import os
 from zipfile import ZipFile
 
 
-class ZipComic:
+class Archive:
     def __init__(self, file):
         self.file = file
         self.comic = Comic(self.__get_file_name())
-        self.__work_dir = os.path.join(self.comic.work_path.name, '.zip')
+        self.__work_dir = os.path.join(self.comic.work_path.name, '.original')
         self.__unpack_comic_to_temp_folder()
         self.__is_several_volumes = self.__volume_check()
         self.comic.volumes = self.__load_comic_structure()
+        self.comic.make_navigation()
 
     @property
     def work_dir(self):
@@ -66,11 +67,11 @@ class ZipComic:
                         for z in os.listdir(y_files):
                             z_files = os.path.join(y_files, z)
                             page_counter += 1
-                            chapter.add_page(Page(z, z_files, page_counter))
+                            chapter.add_page(Page(z, z_files, page_counter, self.comic.sources_path))
                     elif len(list(os.listdir(i_files))) == 1:
-                        chapter = Chapter(y, i_files, 0)
+                        chapter = Chapter(y, i_files, os.listdir(i_files).index(y))
                         page_counter += 1
-                        chapter.add_page(Page(y, y_files, page_counter))
+                        chapter.add_page(Page(y, y_files, page_counter, self.comic.sources_path))
                     else:
                         print('Error: Failure structure')
 
@@ -89,7 +90,7 @@ class ZipComic:
                 for y in os.listdir(i_files):
                     y_files = os.path.join(i_files, y)
                     page_counter += 1
-                    chapter.add_page(Page(y, y_files, page_counter))
+                    chapter.add_page(Page(y, y_files, page_counter, self.comic.sources_path))
                 volume.add_chapter(chapter)
 
             volumes.append(volume)

@@ -4,3 +4,4 @@
 //TODO
 ## Зависимости
 1. transliterate
+2. pillow

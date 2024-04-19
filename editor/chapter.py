@@ -1,22 +1,13 @@
-from comic.volume import Volume
 from pathlib import Path
 
 
 class Chapter:
-    def __init__(self, name, work_dir, position, volume=None):
+    def __init__(self, name, work_dir, position):
         self.name = name
         self.position = position
         self.__work_dir = work_dir
-        self.__volume = volume
         self.__pages = []
         self.__isCover = False
-
-        if volume is None:
-            self.__volume = Volume('Untitled', Path(self.__work_dir).parent.absolute())
-
-    @property
-    def volume(self):
-        return self.__volume
 
     @property
     def pages(self):
@@ -27,7 +18,7 @@ class Chapter:
         return self.__work_dir
 
     @property
-    def isCover(self):
+    def is_cover(self):
         return self.__isCover
 
     def add_page(self, page):

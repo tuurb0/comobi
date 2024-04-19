@@ -1,7 +1,6 @@
-from comic.comic import Comic
-from comic.chapter import Chapter
-from comic.volume import Volume
-import pathlib
+from editor.comic import Comic
+from editor.chapter import Chapter
+from editor.volume import Volume
 import os
 from zipfile import ZipFile
 
@@ -44,6 +43,7 @@ class ZipComic:
                 return True
 
         return False
+
     def __load_comic_structure(self):
         volumes = []
         # If more than one volume
